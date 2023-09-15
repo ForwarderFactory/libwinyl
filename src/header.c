@@ -65,7 +65,11 @@ int winyl_remove_header(winyl* host, char* name) {
             host->headers[i - 1] = header;
         }
         host->_headers_count--;
-        _winyl_header_realloc(host->headers, host->_headers_count);
+        host->headers = _winyl_header_realloc(host->headers, host->_headers_count);
+        if (!host->headers) {
+            host->error = WINYL_ERROR_MALLOC;
+            return -1;
+        }
     }
     return found;
 }
