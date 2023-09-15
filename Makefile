@@ -11,7 +11,7 @@ install: build
 	cd build && $(MAKE) install
 
 clean:
-	rm -rf build test doc CMakeLists.txt
+	rm -rf build test docs CMakeLists.txt
 
 CMakeLists.txt:
 	echo "cmake_minimum_required(VERSION 3.26.4)" > CMakeLists.txt
@@ -39,3 +39,11 @@ build/inc:
 
 test: build build/inc
 	gcc -g -Ibuild/inc test.c -Lbuild -lwinyl -lyuarel -otest
+
+docs: build/inc
+	mkdir -p docs
+	cp Doxyfile build/inc
+	cp DOCS_MAINPAGE.md build/inc
+	cd build/inc && sed -i "s/\$$VERSION/${VERSION}/g" DOCS_MAINPAGE.md
+	cd build/inc && sh -c "echo \"STRIP_FROM_INC_PATH = \\\"$$PWD\\\"\" >> Doxyfile"
+	cd build/inc && doxygen
