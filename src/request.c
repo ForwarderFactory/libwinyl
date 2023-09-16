@@ -7,6 +7,7 @@
 
 #ifndef __DEVKITPPC__
 #include <unistd.h>
+#include <sys/socket.h>
 #define net_socket socket
 #define net_connect connect
 #define net_recv recv
