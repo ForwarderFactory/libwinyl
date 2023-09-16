@@ -2,6 +2,7 @@
 
 VERSION := 0.1
 CMAKE := cmake
+BUILD := Release
 
 build: CMakeLists.txt
 	rm -rf build && mkdir build
@@ -18,7 +19,7 @@ CMakeLists.txt:
 	echo "project(winyl VERSION ${VERSION} DESCRIPTION \"Wii network library\")" >> CMakeLists.txt
 	
 	echo "set(CMAKE_SYSTEM_NAME NintendoWii)" >> CMakeLists.txt
-	echo "set(CMAKE_BUILD_TYPE Release)" >> CMakeLists.txt
+	echo "set(CMAKE_BUILD_TYPE ${BUILD})" >> CMakeLists.txt
 
 	sh -c "echo \"add_library(winyl STATIC$$(find src/ -type f -name \*.c -printf " %p"))\" >> CMakeLists.txt"
 	
@@ -38,7 +39,7 @@ build/inc:
 	cd build/inc && mv include winyl
 
 test: build build/inc
-	gcc -g -Ibuild/inc test.c -Lbuild -lwinyl -lyuarel -otest
+	gcc -Og -ggdb3 -Ibuild/inc test.c -Lbuild -lwinyl -lyuarel -otest
 
 getversion:
-	@echo "${VERSION}"
+	echo "${VERSION}"

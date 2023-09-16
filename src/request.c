@@ -1,4 +1,4 @@
-#include <stdio.h>
+ #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -136,11 +136,8 @@ winyl_response winyl_request(winyl* host, char* path, int flags) {
                             break;
                         }
                     }
-                    int header_index = winyl_add_header(&response._headers, buf2, "");
-                    if (header_index == -1) {
-                        response.error = response._headers.error;
-                        return response;
-                    }
+
+                    char* headername_bkp = strdup(buf2);
 
                     int initI = i + 2;
                     for (i = initI; buf2[i] != '\0'; i++) {
@@ -148,7 +145,13 @@ winyl_response winyl_request(winyl* host, char* path, int flags) {
                     }
                     buf2[i - initI] = '\0';
                     
-                    response._headers.headers[header_index].value = strdup(buf2);
+                    int header_index = winyl_add_header(&response._headers, headername_bkp, buf2);
+                    free(headername_bkp);
+
+                    if (header_index == -1) {
+                        response.error = response._headers.error;
+                        return response;
+                    }
                 }
 
                 free(buf2);
