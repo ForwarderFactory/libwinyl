@@ -49,13 +49,20 @@ int winyl_add_header(winyl* host, char* name, char* value) {
         }
         newIndex = host->_headers_count - 1;
     }
+    else {
+        _winyl_free_header(host->headers[newIndex]);
+    }
+
     host->headers[newIndex] = header;
+    
     return newIndex;
 }
 
 int winyl_remove_header(winyl* host, char* name) {
     int found = winyl_has_header(host, name);
     if (found != -1) {
+        _winyl_free_header(host->headers[found]);
+        
         for (int i = found + 1; i < host->_headers_count; i++) {
             struct winyl_header header;
             header.name = strdup(host->headers[i].name);

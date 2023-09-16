@@ -12,7 +12,7 @@ install: build
 	cd build && $(MAKE) install
 
 clean:
-	rm -rf build test docs CMakeLists.txt
+	rm -rf build dist docs CMakeLists.txt
 
 CMakeLists.txt:
 	echo "cmake_minimum_required(VERSION 3.26.4)" > CMakeLists.txt
@@ -20,11 +20,13 @@ CMakeLists.txt:
 	
 	echo "set(CMAKE_SYSTEM_NAME NintendoWii)" >> CMakeLists.txt
 	echo "set(CMAKE_BUILD_TYPE ${BUILD})" >> CMakeLists.txt
+	
+	echo "set(CMAKE_C_FLAGS_DEBUG \"-Og -ggdb3\")" >> CMakeLists.txt
+	echo "set(CMAKE_VERBOSE_MAKEFILE ON)" >> CMakeLists.txt
 
 	sh -c "echo \"add_library(winyl STATIC$$(find src/ -type f -name \*.c -printf " %p"))\" >> CMakeLists.txt"
 	
 	echo "set_target_properties(winyl PROPERTIES VERSION \$${PROJECT_VERSION})" >> CMakeLists.txt
-	#echo "set_target_properties(winyl PROPERTIES PUBLIC_HEADER include/version.h DESTINATION winyl)" >> CMakeLists.txt
 	sh -c "echo \"install(FILES$$(find include/ -type f -name \*.h -printf " %p") DESTINATION include/winyl)\" >> CMakeLists.txt"
 
 	echo "string(LENGTH \"${VERSION}\" VERSION_LEN)" >> CMakeLists.txt
@@ -37,9 +39,6 @@ build/inc:
 	mkdir -p build/inc
 	cp -r include build/inc
 	cd build/inc && mv include winyl
-
-test: build build/inc
-	gcc -Og -ggdb3 -Ibuild/inc test.c -Lbuild -lwinyl -lyuarel -otest
 
 getversion:
 	@echo "${VERSION}"
