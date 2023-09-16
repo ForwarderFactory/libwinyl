@@ -40,10 +40,5 @@ build/inc:
 test: build build/inc
 	gcc -g -Ibuild/inc test.c -Lbuild -lwinyl -lyuarel -otest
 
-docs: build/inc
-	mkdir -p docs
-	cp Doxyfile build/inc
-	cp DOCS_MAINPAGE.md build/inc
-	cd build/inc && sed -i "s/\$$VERSION/${VERSION}/g" DOCS_MAINPAGE.md
-	cd build/inc && sh -c "echo \"STRIP_FROM_INC_PATH = \\\"$$PWD\\\"\" >> Doxyfile"
-	cd build/inc && doxygen
+getversion:
+	@echo "${VERSION}"
