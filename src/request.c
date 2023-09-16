@@ -10,6 +10,7 @@
 #include <sys/socket.h>
 #define net_socket socket
 #define net_connect connect
+#define net_send send
 #define net_recv recv
 #define net_close close
 #endif
@@ -58,7 +59,7 @@ winyl_response winyl_request(winyl* host, char* path, int flags) {
     }
     snprintf(init, initlen, "%s %s%s HTTP/%d.%d\r\n", host->_method, (flags & WINYL_REQUEST_SLASH) ? "/" : "", path, host->_http_version / 10, host->_http_version % 10);
 
-    if (send(response.socket, init, initlen - 1, 0) < 0) {
+    if (net_send(response.socket, init, initlen - 1, 0) < 0) {
         response.error = WINYL_ERROR_SEND;
         return response;
     }
@@ -73,14 +74,14 @@ winyl_response winyl_request(winyl* host, char* path, int flags) {
             return response;
         }
         snprintf(header, headerlen, "%s: %s\r\n", host->headers[i].name, host->headers[i].value);
-        if (send(response.socket, header, headerlen - 1, 0) < 0) {
+        if (net_send(response.socket, header, headerlen - 1, 0) < 0) {
             response.error = WINYL_ERROR_SEND;
             return response;
         }
         free(header);
     }
     
-    if (send(response.socket, "\r\n", 2, 0) < 0) {
+    if (net_send(response.socket, "\r\n", 2, 0) < 0) {
         response.error = WINYL_ERROR_SEND;
         return response;
     }
