@@ -42,4 +42,4 @@ test: build build/inc
 	gcc -Og -ggdb3 -Ibuild/inc test.c -Lbuild -lwinyl -lyuarel -otest
 
 getversion:
-	echo "${VERSION}"
+	@echo "${VERSION}"
