@@ -4,6 +4,7 @@
 
 #include "../include/winyl.h"
 #include "../include/header.h"
+#include "../include/version.h"
 
 #ifndef __DEVKITPPC__
 #define net_gethostbyname gethostbyname
@@ -66,12 +67,12 @@ winyl winyl_open(char* hostname, int port) {
     free(_host);
     if (host.error != 0) return host;
 
-    char* user_agent = malloc(10 + _WINYL_VERSION_LEN);
+    char* user_agent = malloc(10 + strlen(winyl_version()));
     if (!user_agent) {
         host.error = WINYL_ERROR_MALLOC;
         return host;
     }
-    snprintf(user_agent, 10 + _WINYL_VERSION_LEN, "libwinyl/" _WINYL_VERSION);
+    snprintf(user_agent, 10 + strlen(winyl_version()), "libwinyl/%s", winyl_version());
     winyl_add_header(&host, "User-Agent", user_agent);
     free(user_agent);
     if (host.error != 0) return host;
