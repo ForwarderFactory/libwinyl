@@ -6,8 +6,12 @@
  */
 
 /**
- * @brief Returns the current winyl version
+ * @brief Returns the winyl version length
  */
-char* winyl_version();
+int winyl_version_len();
+/**
+ * @brief Writes the current winyl version into @p version
+ */
+void winyl_version(char* version);
 
 #endif
