@@ -29,7 +29,7 @@ target_compile_definitions(winyl
         _WINYL_VERSION_LEN=${VERSION_LEN}
 )
 
-install(DIRECTORY include/ DESTINATION include)
+install(DIRECTORY include/ DESTINATION include/libwinyl)
 install(TARGETS winyl
         EXPORT winylTargets
         LIBRARY DESTINATION lib
